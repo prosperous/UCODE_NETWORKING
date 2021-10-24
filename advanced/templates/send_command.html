@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script>
+    function loading() {
+        document.getElementById('loader').style.display = 'block';
+    }
+
+</script>
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+    <title>Main UCODE Send Commands</title>
+    <style>
+        .loader {
+  border: 16px solid #f3f3f3; /* Light grey */
+  border-top: 16px solid #3498db; /* Blue */
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Actions: </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+                {% for m in menu %}
+                <li class="nav-item">
+                    <a class="nav-link" aria-current="page" href="{{m.url}}">{{m.name}}</a>
+                </li>
+                {% endfor %}
+            </ul>
+
+
+        </div>
+    </div>
+</nav>
+
+
+<div class="container">
+    <H1>Commands page.</H1>
+    <H3>Hosts in the lab:</H3>
+
+    <div class="row">
+        <table class="table table-sm">
+            <thead>
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Type</th>
+                <th scope="col">IP Address</th>
+                <th scope="col">Credentials</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>dist-rtr01</td>
+                <td>IOS XE</td>
+                <td>10.10.20.175</td>
+                <td>cisco / cisco</td>
+            </tr>
+            <tr>
+                <td>dist-rtr02</td>
+                <td>IOS XE</td>
+                <td>10.10.20.176</td>
+                <td>cisco / cisco</td>
+            </tr>
+            <tr>
+                <td>dist-sw01</td>
+                <td>NX-OS</td>
+                <td>10.10.20.177</td>
+                <td>cisco / cisco</td>
+            </tr>
+            <tr>
+                <td>dist-sw02</td>
+                <td>NX-OS</td>
+                <td>10.10.20.178</td>
+                <td>cisco / cisco</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+    <form action="/send_cmd" method="post" id="commands" onsubmit="loading">
+
+        <select id='host' class="form-select form-select-sm" aria-label=".form-select-sm example" name="hostname">
+            <option selected>Select host</option>
+            <option value="dist-rtr01">dist-rtr01</option>
+            <option value="dist-rtr02">dist-rtr02</option>
+            <option value="dist-sw01">dist-sw01</option>
+            <option value="dist-sw02">dist-sw02</option>
+        </select>
+        </br>
+
+
+        <div class="container" id="custom">
+            <div id=custom_id class="mb-3">
+                <label for="custom-cmd" class="form-label">Enter your command:</label>
+                <input type="text" id="custom-cmd" name="custom_cmd" class="form-control" value="">
+            </div>
+            <button id="create" type="submit" class="btn btn-primary">Execute</button>
+        </div>
+
+    </form>
+    <div class="loader container" id="loader" style="display: none"></div>
+    {% for msg in get_flashed_messages(True) %}
+    <div id="result">
+<div class="flash container">
+      {% for para in msg[1] %}
+        {{para}}</br>
+        {% endfor %}
+</div>
+    </div>
+{% endfor %}
+</div>
+</body>
+</html>

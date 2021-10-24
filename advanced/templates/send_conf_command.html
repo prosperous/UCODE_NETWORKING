@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script>
+    function displayHost() {
+        document.getElementById('host').style.display = 'block';
+        document.getElementById('null-int').style.display = 'none';
+        document.getElementById('not-null-int').style.display = 'none';
+        document.getElementById('int_num_block').style.display = 'none';
+        document.getElementById('dist-rtr').style.display = 'none';
+        document.getElementById('result').style.display = 'none';
+        document.getElementById('loader').style.display = 'none';
+    }
+
+    function loading() {
+        document.getElementById('loader').style.display = 'block';
+    }
+
+    function displayDiv(elementValue) {
+        var select = document.getElementById('actions');
+        var command = select.options[select.selectedIndex].text;
+        if (command == "Create interface") {
+            document.getElementById('dist-rtr').style.display = 'block';
+            document.getElementById('int_num_block').style.display = 'none';
+            document.getElementById('vlan').style.display = 'none';
+            document.getElementById('snmp').style.display = 'none';
+            document.getElementById('ntp').style.display = 'none';
+            document.getElementById('custom').style.display = 'none';
+            document.getElementById('result').style.display = 'none';
+            document.getElementById('loader').style.display = 'none';
+
+        }
+          if (command == "Create VLAN") {
+            document.getElementById('dist-rtr').style.display = 'none';
+            document.getElementById('int_num_block').style.display = 'none';
+            document.getElementById('vlan').style.display = 'block';
+            document.getElementById('snmp').style.display = 'none';
+            document.getElementById('ntp').style.display = 'none';
+            document.getElementById('log').style.display = 'none';
+            document.getElementById('custom').style.display = 'none';
+            document.getElementById('result').style.display = 'none';
+            document.getElementById('loader').style.display = 'none';
+
+        }
+          if (command == "Set SNMP Community string") {
+            document.getElementById('dist-rtr').style.display = 'none';
+            document.getElementById('int_num_block').style.display = 'none';
+            document.getElementById('vlan').style.display = 'none';
+            document.getElementById('snmp').style.display = 'block';
+            document.getElementById('ntp').style.display = 'none';
+            document.getElementById('log').style.display = 'none';
+            document.getElementById('custom').style.display = 'none';
+            document.getElementById('result').style.display = 'none';
+            document.getElementById('loader').style.display = 'none';
+        }
+           if (command == "Set NTP Server") {
+            document.getElementById('dist-rtr').style.display = 'none';
+            document.getElementById('int_num_block').style.display = 'none';
+            document.getElementById('vlan').style.display = 'none';
+            document.getElementById('snmp').style.display = 'none';
+            document.getElementById('ntp').style.display = 'block';
+            document.getElementById('log').style.display = 'none';
+            document.getElementById('custom').style.display = 'none';
+            document.getElementById('result').style.display = 'none';
+            document.getElementById('loader').style.display = 'none';
+
+        }
+        if (command == "Set Logging Server") {
+            document.getElementById('dist-rtr').style.display = 'none';
+            document.getElementById('int_num_block').style.display = 'none';
+            document.getElementById('vlan').style.display = 'none';
+            document.getElementById('snmp').style.display = 'none';
+            document.getElementById('ntp').style.display = 'none';
+            document.getElementById('log').style.display = 'block';
+            document.getElementById('custom').style.display = 'none';
+            document.getElementById('result').style.display = 'none';
+            document.getElementById('loader').style.display = 'none'
+
+        }
+        if (command == "Custom command") {
+            document.getElementById('dist-rtr').style.display = 'none';
+            document.getElementById('int_num_block').style.display = 'none';
+            document.getElementById('vlan').style.display = 'none';
+            document.getElementById('snmp').style.display = 'none';
+            document.getElementById('ntp').style.display = 'none';
+            document.getElementById('log').style.display = 'none';
+            document.getElementById('custom').style.display = 'block';
+            document.getElementById('result').style.display = 'none';
+            document.getElementById('loader').style.display = 'none'
+        }
+
+    }
+
+
+    function displayOptionsForInt(elementValue) {
+        if (elementValue.value == "loopback") {
+            document.getElementById('int_num_block').style.display = 'block';
+        }
+        var select = document.getElementById('host');
+        var host = select.options[select.selectedIndex].text;
+
+        if ((elementValue.value == "null") && (host != "dist-sw01") && (host != "dist-sw02")) {
+            document.getElementById('null-int').style.display = 'block';
+            document.getElementById('not-null-int').style.display = 'none';
+            document.getElementById('int_num_block').style.display = 'none';
+            const button = document.getElementById('create');
+            button.disabled = false;
+        } else if ((elementValue.value == "null") && (host == "dist-sw01")) {
+            document.getElementById('not-null-int').style.display = 'block';
+            document.getElementById('null-int').style.display = 'none';
+            document.getElementById('int_num_block').style.display = 'none';
+            const button = document.getElementById('create');
+            button.disabled = true;
+        } else if ((elementValue.value == "null") && (host == "dist-sw02")) {
+            document.getElementById('not-null-int').style.display = 'block';
+            document.getElementById('null-int').style.display = 'none';
+            document.getElementById('int_num_block').style.display = 'none';
+            const button = document.getElementById('create');
+            button.disabled = true;
+        }
+    }
+
+</script>
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+    <title>Main UCODE Send Configuration Commands</title>
+    <style>
+        .loader {
+  border: 16px solid #f3f3f3; /* Light grey */
+  border-top: 16px solid #3498db; /* Blue */
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Actions: </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+                {% for m in menu %}
+                <li class="nav-item">
+                    <a class="nav-link" aria-current="page" href="{{m.url}}">{{m.name}}</a>
+                </li>
+                {% endfor %}
+            </ul>
+
+
+        </div>
+    </div>
+</nav>
+
+
+<div class="container">
+    <H1>Configuration Commands page.</H1>
+    <H3>Hosts in the lab:</H3>
+
+    <div class="row">
+        <table class="table table-sm">
+            <thead>
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Type</th>
+                <th scope="col">IP Address</th>
+                <th scope="col">Credentials</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>dist-rtr01</td>
+                <td>IOS XE</td>
+                <td>10.10.20.175</td>
+                <td>cisco / cisco</td>
+            </tr>
+            <tr>
+                <td>dist-rtr02</td>
+                <td>IOS XE</td>
+                <td>10.10.20.176</td>
+                <td>cisco / cisco</td>
+            </tr>
+            <tr>
+                <td>dist-sw01</td>
+                <td>NX-OS</td>
+                <td>10.10.20.177</td>
+                <td>cisco / cisco</td>
+            </tr>
+            <tr>
+                <td>dist-sw02</td>
+                <td>NX-OS</td>
+                <td>10.10.20.178</td>
+                <td>cisco / cisco</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!--    <div class="row">-->
+    <!--        <div class="col-md-8">To create VLAN use command:</div>-->
+    <!--                <div class="col-md-3">To create VLAN use command:</div>-->
+
+    <!--    </div>-->
+
+    <form action="/send_conf" method="post" id="commands" onsubmit="loading">
+        <label for="actions" class="form-label">Select Command:</label>
+        <select id='actions' class="form-select form-select-sm" aria-label=".form-select-sm example" onchange="displayHost()"
+                name="action">
+            <option selected>Select command</option>
+            <option value="interface">Create interface</option>
+            <option value="vlan">Create VLAN</option>
+            <option value="snmp">Set SNMP Community string</option>
+            <option value="ntp">Set NTP Server</option>
+            <option value="log">Set Logging Server</option>
+            <option value="custom">Custom command</option>
+        </select>
+        </br>
+        <select style="display: none" id='host' class="form-select form-select-sm" aria-label=".form-select-sm example"
+                onchange="displayDiv(this)" name="hostname">
+            <option selected>Select host</option>
+            <option value="dist-rtr01">dist-rtr01</option>
+            <option value="dist-rtr02">dist-rtr02</option>
+            <option value="dist-sw01">dist-sw01</option>
+            <option value="dist-sw02">dist-sw02</option>
+        </select>
+        </br>
+
+        <ul id="dist-rtr" style="display: none">
+            <div class="mb-3">
+                <select style="display: block" id='interface_type' class="form-select form-select-sm"
+                        aria-label=".form-select-sm example"
+                        onchange="displayOptionsForInt(this)" name="int_type">
+                    <option selected>Select interface Type</option>
+                    <option value="loopback">loopback</option>
+                    <option value="null">null</option>
+                </select>
+            </div>
+
+            <div id=int_num_block class="mb-3" style="display: none">
+                <label for="int_num" class="form-label">Interface Number:</label>
+                <input type="text" id="int_num" name="int_num" class="form-control" value="1">
+            </div>
+
+            <div id=null-int class="mb-3" style="display: none">
+                <p>We will create null0 on Router</p>
+            </div>
+            <div id=not-null-int class="mb-3" style="display: none">
+                <p>We can not create null0 on Switch</p>
+            </div>
+
+            <button id="create" type="submit" class="btn btn-primary">Create</button>
+        </ul>
+
+
+        <div class="container" id="vlan" style="display: none">
+            <div id=vlan_id class="mb-3">
+                <label for="vlan_id" class="form-label">Vlan ID:</label>
+                <input type="text" id="vlan" name="vlan_id" class="form-control" value="17">
+            </div>
+            <div id=vlan_name class="mb-3">
+                <label for="vlan_name" class="form-label">Vlan Name:</label>
+                <input type="text" id="vlan_name" name="vlan_name" class="form-control" value="None">
+            </div>
+            <button id="create" type="submit" class="btn btn-primary">Create</button>
+        </div>
+
+        <div class="container" id="snmp" style="display: none">
+            <div id=snmp_id class="mb-3">
+                <label for="snmp_str" class="form-label">Set your community string:</label>
+                <input type="text" id="snmp_str" name="snmp_str" class="form-control" value="community-str">
+            </div>
+            <button id="create" type="submit" class="btn btn-primary">Set SNMP</button>
+        </div>
+
+        <div class="container" id="ntp" style="display: none">
+            <div id=ntp_id class="mb-3">
+                <label for="ntp-ip" class="form-label">Set your NTP Server:</label>
+                <input type="text" id="ntp-ip" name="ntp" class="form-control" value="91.236.251.5">
+            </div>
+            <button id="create" type="submit" class="btn btn-primary">Set SNMP</button>
+        </div>
+
+        <div class="container" id="log" style="display: none">
+            <div id=log_id class="mb-3">
+                <label for="log-ip" class="form-label">Set your SYSLOG Server:</label>
+                <input type="text" id="log-ip" name="log-ip" class="form-control" value="192.168.0.1">
+            </div>
+            <button id="create" type="submit" class="btn btn-primary">Set SYSLOG</button>
+        </div>
+
+        <div class="container" id="custom" style="display: none">
+            <div id=custom_id class="mb-3">
+                <label for="custom-cmd" class="form-label">Enter your config command:</label>
+                <input type="text" id="custom-cmd" name="custom_cmd" class="form-control" value="">
+            </div>
+            <button id="create" type="submit" class="btn btn-primary">Execute</button>
+        </div>
+
+    </form>
+    <div class="loader container" id="loader" style="display: none"></div>
+    {% for msg in get_flashed_messages(True) %}
+    <div id="result">
+<div class="flash container">
+      {% for para in msg[1] %}
+        {{para}}</br>
+        {% endfor %}
+</div>
+    </div>
+{% endfor %}
+</div>
+</body>
+</html>
