@@ -84,7 +84,7 @@ for device in network_devices:
         device.close()
         print("Done")
     except Exception as err:
-        print(f"Can not connect to device {device_hostname}")
+        print(f'Can not connect to device {device_hostname}')
         print(err)
 
 print(tabulate(mac_table, headers="firstrow"))
