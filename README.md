@@ -15,6 +15,10 @@ pip install flask
 pip install virl2_client
 ```
 
+Install [Cisco ios configuration module for Ansible](https://docs.ansible.com/ansible/latest/collections/cisco/ios/ios_config_module.html)
+```bash
+ansible-galaxy collection install cisco.ios
+```
 ## Script Usage
 
 All *.sh scripts must be excutable or can be run as:
