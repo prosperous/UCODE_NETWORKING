@@ -103,7 +103,7 @@ def main():
             print("Done.")
             device.close()
         except Exception as err:
-            print(f"Can not connect to device {device_facts["hostname"]}")
+            print(f'Can not connect to device {device_facts["hostname"]}')
             print(err)
 
     print(tabulate(devices_table, headers="firstrow"))
